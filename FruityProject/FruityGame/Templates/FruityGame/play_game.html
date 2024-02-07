@@ -1,0 +1,137 @@
+{% extends 'FruityGame/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <img id="title-image" src="{% static 'slot-images/fruit-slot-game-high-resolution-logo-transparent.png' %}" alt="Title" width="350" height="150">
+    <div class="slot-machine">
+        <div class="slot-container">
+            <div class="slot">
+                <div class="slot-images" id="slot-images">
+                    <img src="{% static 'slot-images/Bell.png' %}" alt="Bell"  width="50" height="50">
+                    <img src="{% static 'slot-images/Blank.png' %}"  alt="Blank" width="50" height="50">
+                    <img src="{% static 'slot-images/Cherry.png' %}"  alt="Cherry" width="50" height="50">
+                    <img src="{% static 'slot-images/Diamond.png' %}"  alt="Diamond" width="50" height="50">
+                    <img src="{% static 'slot-images/Lemon.png' %}"  alt="Lemon" width="50" height="50">
+                    <img src="{% static 'slot-images/Seven.png' %}"  alt="Seven" width="50" height="50">
+                </div>
+                <div class="slot-center"></div>
+            </div>
+            <form id="play-form">
+                {% csrf_token %}
+                <label for="bet">Enter Bet:</label>
+                <input type="number" id="bet" name="bet" required>
+                <button type="submit" onclick="play()">Play</button>
+            </form>
+            <p>Result: <span id="result"></span></p>
+            <p>Symbol: <span id="symbol"></span></p>
+            <p>Balance: <span id="balance"></span></p>
+        </div>
+    </div>
+</body>
+
+<script>
+    var isPlaying = false;
+    var direction = 'left';
+    var spinsLeft = 50;
+    var symbol = "";
+
+    $(document).ready(function(){
+        $('#play-form').submit(function(event){
+            event.preventDefault();
+            var bet = document.getElementById("bet").value;
+            if (bet <= 0 || isNaN(bet) || parseInt(bet) != parseFloat(bet)) {
+                alert("Please enter a positive integer for the bet.");
+                return; 
+            }
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/play/',
+                data: formData,
+                success: function(response){
+                    $('#symbol').text(response.symbol);
+                    symbol = response.symbol
+                    $('#balance').text(response.balance);
+                }
+            });
+        });
+    });
+
+    function play() {
+        var bet = document.getElementById("bet").value;
+        if (bet <= 0 || isNaN(bet) || parseInt(bet) != parseFloat(bet)) {
+            alert("Please enter a positive integer for the bet.");
+            return; 
+        }
+        if (!isPlaying) {
+            isPlaying = true;
+            moveImages();
+        }
+    }
+
+    function moveImages() {
+        var slotImages = document.getElementById('slot-images');
+        var firstImage = slotImages.firstElementChild;
+
+        if (spinsLeft > 0) {
+            spinsLeft--;
+        } else {
+            if (firstImage.getAttribute('alt') === symbol) {
+                isPlaying = false;
+                spinsLeft = 50;
+                switch(symbol){
+                    case "Blank":
+                        $('#result').text('Bummer the odds was really not in your favour :(');
+                        break;
+                    case "Cherry":
+                        $('#result').text('Bummer the odds was not in your favour');
+                        break;
+                    case "Lemon":
+                        $('#result').text('So close maybe next time you will win big!!');
+                        break;
+                    case "Bell":
+                        $('#result').text('Nice you won!!!');
+                        break;
+                    case "Diamond":
+                        $('#result').text('Big cashout!!!');
+                        break;
+                    case "Seven":
+                        $('#result').text('The odds was extremly in your favour!!! Are you hacking??');
+                        break;
+                    default:
+                        $('#result').text('Pending.....');
+                }
+                return;
+            }
+        }
+
+        if (direction === 'left') {
+            slotImages.appendChild(firstImage.cloneNode(true));
+            slotImages.style.transition = 'transform 0.5s ease';
+            slotImages.style.transform = 'translateX(-50px)';
+        } else {
+            slotImages.insertBefore(slotImages.lastElementChild, slotImages.firstElementChild);
+            slotImages.style.transition = 'none';
+            slotImages.style.transform = 'translateX(-50px)';
+        }
+
+        setTimeout(function() {
+            slotImages.style.transition = 'none';
+            slotImages.style.transform = 'translateX(0)';
+            if (direction === 'left') {
+                slotImages.removeChild(firstImage);
+            }
+            moveImages();
+        }, 10);
+    }
+</script>
+
+
+{% endblock %}
