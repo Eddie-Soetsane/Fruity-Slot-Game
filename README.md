@@ -22,14 +22,13 @@ This full-stack web application was created using [Django](https://docs.djangopr
 
 ## Task Details
 
-1. Parse the provided JSON containing the game definitions, including symbols, weights, and
-payouts
+### 1. Parse the provided JSON containing the game definitions, including symbols, weights, and payouts
 
 ![image](https://github.com/Eddie-Soetsane/Fruity-Slot-Game/assets/92805762/2c0e8e4f-72d1-44ac-bc0e-2366e3d8f700)
 
 ![image](https://github.com/Eddie-Soetsane/Fruity-Slot-Game/assets/92805762/3b4e88a5-d470-4987-8713-c486b1cf8f99)
 
-2. Implement the backend logic for the game based on the JSON definitions
+### 2. Implement the backend logic for the game based on the JSON definitions
 
 ![image](https://github.com/Eddie-Soetsane/Fruity-Slot-Game/assets/92805762/6d92c5e3-dc25-458f-84ae-0ac02be03d81)
 
@@ -39,8 +38,7 @@ I then call another class I created called WeightedRandomNumberGenerator which u
 After I called this class I can recieve the result of the random symbol and from that I can workout the total winnings of the user.
 I then return the symbol and the total as they will be needed for the front-end.
 
-3. Make use of a suitable PRNG (Pseudorandom Number Generator) for generating the result of a
-spin (please do not implement your own RNG).
+### 3. Make use of a suitable PRNG (Pseudorandom Number Generator) for generating the result of a spin (please do not implement your own RNG).
 
 ![image](https://github.com/Eddie-Soetsane/Fruity-Slot-Game/assets/92805762/e62c9970-e657-4717-be0f-964301ca61fb)
 
@@ -54,9 +52,7 @@ I scan through all the weights to find the moment when the randomNumber is less 
 to the number and probability is given.
 I created a get payout function so that the correct payout multipler can be applied in the fruity slot class.
 
-4.Create a basic console application or web interface to display the output of the game. The
-frontend is not a priority, but if you would like to demonstrate frontend skills, feel free to run
-with it.
+### 4.Create a basic console application or web interface to display the output of the game. Thefrontend is not a priority, but if you would like to demonstrate frontend skills, feel free to run with it.
 
 ![image](https://github.com/Eddie-Soetsane/Fruity-Slot-Game/assets/92805762/37f54eec-c9db-4034-8b74-33642ed0e1db)
 
@@ -80,7 +76,8 @@ Coding for spinning and how the front and back-end was communicating:
 ![image](https://github.com/Eddie-Soetsane/Fruity-Slot-Game/assets/92805762/0efdc215-4c7b-456c-aba0-978da357f350)
 
 
-5. You are free to use any programming language and technology stack.
+### 5. You are free to use any programming language and technology stack.
+
 Like previously stated above I used Python Django for my back-end with Javascript, html and css for my front-end
 
 ## Conclusion
